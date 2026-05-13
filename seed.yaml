@@ -1,0 +1,40 @@
+schema_version: '1.0'
+organ: ORGAN-III
+organ_name: Ergon
+repo: growth-auditor
+org: organvm-iii-ergon
+metadata:
+  implementation_status: ACTIVE
+  tier: flagship
+  promotion_status: PUBLIC_PROCESS
+  last_validated: '2026-04-28'
+  description: >-
+    Growth Auditor: a multi-tenant SaaS platform that performs AI-powered website growth audits. 
+    Users receive a structured audit scored across four pillars (Mercury/Communication, 
+    Venus/Aesthetic, Mars/Drive, Saturn/Structure).
+  stack:
+    - Next.js 16
+    - React 19
+    - TypeScript
+    - Vercel AI SDK
+    - Supabase/SQLite
+telós: website_growth_optimization
+pragma: ai_powered_audit_engine
+praxis: multi_pillar_growth_analysis
+receptio: growth_infrastructure_standardization
+produces:
+- type: growth_audit
+  description: Comprehensive AI-powered website analysis across four pillars.
+- type: growth_insights
+  description: LLM-generated tactical recommendations for website improvement.
+- type: strategic_playbooks
+  description: Gated strategy playbooks for Pro users.
+consumes:
+- type: website_url
+  description: Target URL for scraping and analysis.
+- type: user_feedback
+  description: Direct feedback on audit sections for refinement.
+edges:
+- produces: growth_audit
+- produces: growth_insights
+- consumes: website_url
