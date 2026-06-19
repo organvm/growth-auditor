@@ -1,6 +1,6 @@
-# Specvla Ergon — Avditor Mvndi ✦
+# Growth Auditor — Avditor Mvndi ✦
 
-[![Status](https://img.shields.io/badge/status-omega-blueviolet?style=for-the-badge)](https://github.com/organvm-iii-ergon/specvla-ergon--avditor-mvndi)
+[![Status](https://img.shields.io/badge/status-omega-blueviolet?style=for-the-badge)](https://github.com/organvm-i-theoria/growth-auditor)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)](https://react.dev)
@@ -14,8 +14,8 @@
 
 ```bash
 # 1. Clone & Install
-git clone https://github.com/organvm-iii-ergon/specvla-ergon--avditor-mvndi.git
-cd specvla-ergon--avditor-mvndi
+git clone https://github.com/organvm-i-theoria/growth-auditor.git
+cd growth-auditor
 npm install
 
 # 2. Configure Environment
