@@ -35,6 +35,7 @@ vi.mock('@/services/pagespeed', () => ({
 
 vi.mock('@/lib/db', () => ({
   saveAudit: vi.fn().mockResolvedValue(undefined),
+  getIntegrations: vi.fn().mockResolvedValue([]),
 }));
 
 vi.mock('@/auth', () => ({
