@@ -4,14 +4,19 @@ organ_name: Ergon
 repo: growth-auditor
 org: organvm-iii-ergon
 metadata:
-  implementation_status: ACTIVE
-  tier: flagship
-  promotion_status: PUBLIC_PROCESS
-  last_validated: '2026-04-28'
+  implementation_status: ARCHIVED
+  tier: archive
+  promotion_status: ARCHIVED
+  last_validated: '2026-06-19'
+  archive_reason: duplicate-superseded
+  canonical_repository: organvm-iii-ergon/specvla-ergon--avditor-mvndi
+  canonical_deployment: https://specvla-ergon-avditor-mvndi.vercel.app
+  activation_audit: https://github.com/organvm-i-theoria/growth-auditor/issues/3
   description: >-
-    Growth Auditor: a multi-tenant SaaS platform that performs AI-powered website growth audits. 
-    Users receive a structured audit scored across four pillars (Mercury/Communication, 
-    Venus/Aesthetic, Mars/Drive, Saturn/Structure).
+    Archived duplicate-superseded mirror of the Avditor Mvndi AI growth-audit
+    SaaS, retained only as a parity-rectification record under the pre-rebrand
+    growth-auditor name. Activate, deploy, and continue product work from the
+    canonical ORGAN-III repository instead.
   stack:
     - Next.js 16
     - React 19
