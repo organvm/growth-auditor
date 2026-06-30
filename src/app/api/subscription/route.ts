@@ -6,6 +6,7 @@ const stripeSecret = process.env.STRIPE_SECRET_KEY || "sk_test_placeholder";
 const stripe = new Stripe(stripeSecret, {
   apiVersion: "2026-02-25.clover",
 });
+const stripeProPriceId = process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID || "price_placeholder_pro";
 
 const rateLimit = new LRUCache({
   max: 100,
@@ -26,6 +27,10 @@ export async function POST(request: Request) {
 
     if (!email || !priceId) {
       return NextResponse.json({ error: "Email and priceId are required" }, { status: 400 });
+    }
+
+    if (priceId === "price_placeholder_pro" || stripeProPriceId === "price_placeholder_pro") {
+      return NextResponse.json({ error: "NEXT_PUBLIC_STRIPE_PRO_PRICE_ID must be set for Pro subscriptions" }, { status: 500 });
     }
 
     if (stripeSecret === "sk_test_placeholder") {

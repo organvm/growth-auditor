@@ -25,7 +25,12 @@ vi.mock("lru-cache", () => {
   return { LRUCache: MockLRUCache };
 });
 
-import { POST } from "./route";
+async function loadPostHandler() {
+  process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID = "price_123";
+  vi.resetModules();
+  const route = await import("./route");
+  return route.POST;
+}
 
 function makeRequest(body: Record<string, unknown>, ip?: string): Request {
   return new Request("http://localhost:3000/api/subscription", {
@@ -45,6 +50,7 @@ describe("POST /api/subscription", () => {
   });
 
   it("returns mock URL with placeholder key", async () => {
+    const POST = await loadPostHandler();
     const res = await POST(makeRequest({ email: "user@test.com", priceId: "price_123" }));
     const data = await res.json();
 
@@ -53,6 +59,7 @@ describe("POST /api/subscription", () => {
   });
 
   it("returns 400 when email is missing", async () => {
+    const POST = await loadPostHandler();
     const res = await POST(makeRequest({ priceId: "price_123" }));
     const data = await res.json();
 
@@ -61,6 +68,7 @@ describe("POST /api/subscription", () => {
   });
 
   it("returns 400 when priceId is missing", async () => {
+    const POST = await loadPostHandler();
     const res = await POST(makeRequest({ email: "user@test.com" }));
     const data = await res.json();
 
@@ -69,6 +77,7 @@ describe("POST /api/subscription", () => {
   });
 
   it("returns 429 on rate limit", async () => {
+    const POST = await loadPostHandler();
     mockGet.mockReturnValue(10);
 
     const res = await POST(makeRequest({ email: "user@test.com", priceId: "price_123" }, "1.2.3.4"));
