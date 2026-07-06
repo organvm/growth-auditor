@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import Loader from "@/components/Loader";
 import type { TeamMemberRecord } from "@/lib/db";
 
-export default function TeamDetailsPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function TeamDetailsPage() {
+  const { id } = useParams<{ id: string }>();
   const [members, setMembers] = useState<TeamMemberRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [inviting, setInviting] = useState(false);

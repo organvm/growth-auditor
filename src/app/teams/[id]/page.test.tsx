@@ -10,9 +10,11 @@ vi.mock("next-auth/react", () => ({
   useSession: vi.fn(() => ({ data: { user: { email: "owner@example.com" } } })),
 }));
 
-describe("TeamDetailsPage", () => {
-  const params = { id: "team-123" };
+vi.mock("next/navigation", () => ({
+  useParams: () => ({ id: "team-123" }),
+}));
 
+describe("TeamDetailsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -23,7 +25,7 @@ describe("TeamDetailsPage", () => {
       json: async () => [{ id: "m1", email: "owner@example.com", role: "owner" }],
     } as unknown as Response);
 
-    render(<TeamDetailsPage params={params} />);
+    render(<TeamDetailsPage />);
     expect(await screen.findByText("owner@example.com")).toBeInTheDocument();
     expect(screen.getByText("OWNER")).toBeInTheDocument();
   });
@@ -37,7 +39,7 @@ describe("TeamDetailsPage", () => {
         { id: "m2", email: "new@test.com", role: "member" }
       ] } as unknown as Response);
 
-    render(<TeamDetailsPage params={params} />);
+    render(<TeamDetailsPage />);
     
     // Wait for loading to finish
     const input = await screen.findByPlaceholderText(/colleague@example.com/i);
