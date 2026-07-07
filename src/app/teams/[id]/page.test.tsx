@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import TeamDetailsPage from "./page";
+import { TeamDetailsPageContent } from "./TeamDetailsPageContent";
 
 // Mock fetch
 global.fetch = vi.fn();
@@ -11,11 +11,13 @@ vi.mock("next-auth/react", () => ({
 }));
 
 describe("TeamDetailsPage", () => {
-  const params = { id: "team-123" };
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
+
+  function renderTeamDetailsPage() {
+    return render(<TeamDetailsPageContent id="team-123" />);
+  }
 
   it("renders member list", async () => {
     vi.mocked(global.fetch).mockResolvedValue({
@@ -23,7 +25,7 @@ describe("TeamDetailsPage", () => {
       json: async () => [{ id: "m1", email: "owner@example.com", role: "owner" }],
     } as unknown as Response);
 
-    render(<TeamDetailsPage params={params} />);
+    renderTeamDetailsPage();
     expect(await screen.findByText("owner@example.com")).toBeInTheDocument();
     expect(screen.getByText("OWNER")).toBeInTheDocument();
   });
@@ -37,7 +39,7 @@ describe("TeamDetailsPage", () => {
         { id: "m2", email: "new@test.com", role: "member" }
       ] } as unknown as Response);
 
-    render(<TeamDetailsPage params={params} />);
+    renderTeamDetailsPage();
     
     // Wait for loading to finish
     const input = await screen.findByPlaceholderText(/colleague@example.com/i);
