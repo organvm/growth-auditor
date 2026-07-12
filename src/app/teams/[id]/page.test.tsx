@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { Suspense } from "react";
+import { act, render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import TeamDetailsPage from "./page";
 
@@ -11,7 +12,15 @@ vi.mock("next-auth/react", () => ({
 }));
 
 describe("TeamDetailsPage", () => {
-  const params = { id: "team-123" };
+  const renderPage = async () => {
+    await act(async () => {
+      render(
+        <Suspense fallback={null}>
+          <TeamDetailsPage params={Promise.resolve({ id: "team-123" })} />
+        </Suspense>
+      );
+    });
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -23,7 +32,7 @@ describe("TeamDetailsPage", () => {
       json: async () => [{ id: "m1", email: "owner@example.com", role: "owner" }],
     } as unknown as Response);
 
-    render(<TeamDetailsPage params={params} />);
+    await renderPage();
     expect(await screen.findByText("owner@example.com")).toBeInTheDocument();
     expect(screen.getByText("OWNER")).toBeInTheDocument();
   });
@@ -37,7 +46,7 @@ describe("TeamDetailsPage", () => {
         { id: "m2", email: "new@test.com", role: "member" }
       ] } as unknown as Response);
 
-    render(<TeamDetailsPage params={params} />);
+    await renderPage();
     
     // Wait for loading to finish
     const input = await screen.findByPlaceholderText(/colleague@example.com/i);
