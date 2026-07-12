@@ -9,6 +9,9 @@ export default defineConfig({
   reporter: "html",
   use: {
     baseURL: "http://localhost:3000",
+    launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH
+      ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH }
+      : undefined,
     trace: "on-first-retry",
   },
   projects: [
@@ -20,6 +23,13 @@ export default defineConfig({
   webServer: {
     command: "npm run dev",
     url: "http://localhost:3000",
+    env: {
+      ...process.env,
+      // Auth.js intentionally fails closed without a secret. E2E runs exercise the
+      // anonymous product surface, so give only the test web server an ephemeral,
+      // non-production value instead of depending on a repository secret.
+      AUTH_SECRET: process.env.AUTH_SECRET ?? "growth-auditor-playwright-only-secret",
+    },
     reuseExistingServer: !process.env.CI,
     timeout: 30000,
   },
