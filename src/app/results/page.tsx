@@ -1,17 +1,19 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import Loader from "@/components/Loader";
 import SignalPathNode from "@/components/SignalPathNode";
-import AlignmentSigil from "@/components/AlignmentSigil";
 import ChatBox from "@/components/ChatBox";
 import EmailGate from "@/components/EmailGate";
 import ShareButtons from "@/components/ShareButtons";
 import { getStoredApiKey, getStoredProvider } from "@/services/aiProvider";
 import { useSession } from "next-auth/react";
 import ProBadge from "@/components/ProBadge";
+
+const AlignmentSigil = dynamic(() => import("@/components/AlignmentSigil"), { ssr: false });
 
 function parseScoresFromText(text: string): { communication: number; aesthetic: number; drive: number; structure: number } | null {
   const scoresMatch = text.match(/## Scores[\s\S]*$/);
