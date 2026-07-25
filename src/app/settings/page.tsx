@@ -29,6 +29,7 @@ const WEBHOOK_EVENTS = [
 export default function SettingsPage() {
   const [provider, setProvider] = useState<AIProvider>("gemini");
   const [apiKey, setApiKey] = useState("");
+  const [apiSettingsLoaded, setApiSettingsLoaded] = useState(false);
   const [logoUrl, setLogoUrl] = useState("");
   const [saved, setSaved] = useState(false);
   const [brandingSaved, setBrandingSaved] = useState(false);
@@ -96,7 +97,10 @@ export default function SettingsPage() {
     const storedKey = getStoredApiKey(storedProvider) || "";
     setProvider(storedProvider);
     setApiKey(storedKey);
+    setApiSettingsLoaded(true);
+  }, []);
 
+  useEffect(() => {
     if (session?.user?.email) {
       fetch("/api/settings/branding")
         .then(res => res.json())
@@ -106,7 +110,7 @@ export default function SettingsPage() {
         .catch(() => {});
     }
     fetchIntegrations();
-  }, [session, fetchIntegrations]);
+  }, [session?.user?.email, fetchIntegrations]);
 
   const handleProviderChange = (newProvider: AIProvider) => {
     setProvider(newProvider);
@@ -203,18 +207,18 @@ export default function SettingsPage() {
             <div className="tab-content" style={{ animation: "fadeIn 0.3s" }}>
               <div className="form-group">
                 <label htmlFor="provider">Selected AI Model</label>
-                <select id="provider" className="input" value={provider} onChange={(e) => handleProviderChange(e.target.value as AIProvider)}>
+                <select id="provider" className="input" value={provider} disabled={!apiSettingsLoaded} onChange={(e) => handleProviderChange(e.target.value as AIProvider)}>
                   {AI_PROVIDERS.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
               </div>
               <div className="form-group">
                 <label htmlFor="apikey">{config.name} Secret Key</label>
-                <input id="apikey" type="password" className="input" placeholder={config.keyPlaceholder} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
+                <input id="apikey" type="password" className="input" placeholder={config.keyPlaceholder} value={apiKey} disabled={!apiSettingsLoaded} onChange={(e) => setApiKey(e.target.value)} />
                 <small style={{ color: "var(--text-muted)", marginTop: "0.5rem", display: "block" }}>
                   Get credentials at <a href={config.getKeyUrl} target="_blank" rel="noopener noreferrer" style={{ color: "var(--primary)" }}>{config.name}</a>
                 </small>
               </div>
-              <button className="btn" onClick={saveKeys}>
+              <button className="btn" disabled={!apiSettingsLoaded} onClick={saveKeys}>
                 {saved ? "Alignment Saved! ✦" : "Align AI Engine"}
               </button>
             </div>
