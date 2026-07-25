@@ -22,5 +22,10 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 30000,
+    env: {
+      // Auth.js requires a secret even when E2E runs without signing in. This is
+      // an intentionally non-sensitive fixture, never a production credential.
+      AUTH_SECRET: process.env.AUTH_SECRET || "e2e",
+    },
   },
 });
