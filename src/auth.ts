@@ -9,8 +9,10 @@ import GitHub from "next-auth/providers/github"
 
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "admin@growthauditor.ai").split(",");
 const AUTH_PASSWORD = process.env.AUTH_PASSWORD || "cosmic"; // allow-secret
+const AUTH_SECRET = process.env.AUTH_SECRET || "development-secret-key"; // allow-secret
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  secret: AUTH_SECRET,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
