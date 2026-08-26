@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { use, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Loader from "@/components/Loader";
 import type { TeamMemberRecord } from "@/lib/db";
 
-export default function TeamDetailsPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function TeamDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [members, setMembers] = useState<TeamMemberRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [inviting, setInviting] = useState(false);
