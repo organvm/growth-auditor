@@ -52,6 +52,7 @@ const envMap: Record<string, string> = {
   authPassword: "AUTH_PASSWORD", // allow-secret
   nextAuthSecret: "NEXTAUTH_SECRET",
   baseUrl: "NEXT_PUBLIC_BASE_URL",
+  emailFrom: "EMAIL_FROM",
   appName: "NEXT_PUBLIC_APP_NAME",
   webhookUrl: "WEBHOOK_URL",
   webhookSecret: "WEBHOOK_SECRET",

@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import { saveAudit, getScheduledAudits, updateScheduledAudit, getSubscription, getTeamMembers } from "@/lib/db";
+import { getConfig } from "@/lib/config";
 import { orchestrateCosmicAudit } from "@/services/aiOrchestrator";
 import { Resend } from "resend";
 import crypto from "crypto";
 
 const resend = new Resend(process.env.RESEND_API_KEY || "re_test_placeholder");
+
+function getEmailFrom(): string {
+  return `${getConfig("appName") || "Avditor Mvndi"} <${getConfig("emailFrom") || "hello@growthauditor.ai"}>`;
+}
+
+function getBaseUrl(): string {
+  return getConfig("baseUrl") || "http://localhost:3000";
+}
 
 async function generateMonthlyAudit(
   link: string,
@@ -57,7 +66,7 @@ async function generateMonthlyAudit(
     const scores = result.scores || {};
     try {
       await resend.emails.send({
-        from: "Avditor Mvndi <hello@growthauditor.ai>",
+        from: getEmailFrom(),
         to: recipients,
         subject: "Your Cosmic Alignment Has Evolved ✦",
         html: `
@@ -72,7 +81,7 @@ async function generateMonthlyAudit(
               <li>Saturn (Structure): ${scores.structure}/100</li>
             </ul>
           </div>
-          <p><a href="${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/history">View full evolution in your archive.</a></p>
+          <p><a href="${getBaseUrl()}/history">View full evolution in your archive.</a></p>
           <p>Stay cosmic,</p>
           <p>The Avditor Mvndi Team</p>
         `,
@@ -94,7 +103,13 @@ function isDue(frequency: "weekly" | "monthly", lastRunAt?: string): boolean {
 export async function GET(req: Request) {
   try {
     const authHeader = req.headers.get("Authorization");
-    const expectedSecret = `Bearer ${process.env.CRON_SECRET || "dev_cron_secret"}`;
+    const cronSecret = process.env.CRON_SECRET;
+
+    if (!cronSecret) {
+      return NextResponse.json({ error: "CRON_SECRET is not configured" }, { status: 500 });
+    }
+
+    const expectedSecret = `Bearer ${cronSecret}`;
 
     if (authHeader !== expectedSecret) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

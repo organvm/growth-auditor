@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+const PRO_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID || "price_placeholder_pro";
+
 const PLANS = [
   {
     id: "basic",
@@ -33,7 +35,7 @@ const PLANS = [
       "Premium AI models (Claude 3.5 Sonnet)",
     ],
     cta: "Manifest Pro",
-    priceId: "price_placeholder_pro",
+    priceId: PRO_PRICE_ID,
     highlight: true,
   },
 ];

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { updateSubscription } from "@/lib/db";
+import { getConfig } from "@/lib/config";
 
 const stripeSecret = process.env.STRIPE_SECRET_KEY || "sk_test_placeholder";
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || "whsec_placeholder";
@@ -10,6 +11,10 @@ const stripe = new Stripe(stripeSecret, {
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY || "re_test_placeholder");
+
+function getEmailFrom(): string {
+  return `${getConfig("appName") || "Avditor Mvndi"} <${getConfig("emailFrom") || "hello@growthauditor.ai"}>`;
+}
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -40,7 +45,7 @@ export async function POST(req: Request) {
         if (isSubscription) {
           await updateSubscription(email, "pro", "active");
           await resend.emails.send({
-            from: "Avditor Mvndi <hello@growthauditor.ai>",
+            from: getEmailFrom(),
             to: email,
             subject: "Your Monthly Alignment is Active ✦",
             html: `
@@ -53,7 +58,7 @@ export async function POST(req: Request) {
           });
         } else {
           await resend.emails.send({
-            from: "Avditor Mvndi <hello@growthauditor.ai>",
+            from: getEmailFrom(),
             to: email,
             subject: "Your Manifestation Path is Confirmed ✦",
             html: `
