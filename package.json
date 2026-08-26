@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint --config .config/eslint.config.mjs",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run --config .config/vitest.config.ts",
     "test:watch": "vitest --config .config/vitest.config.ts",
     "test:e2e": "playwright test --config .config/playwright.config.ts",
